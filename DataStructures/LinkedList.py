@@ -4,19 +4,21 @@ class LinkedList:
         self.size = 0
 
     def insert(self, data):
+        self.increment_size()
         new_node = Node(data)
         new_node.set_next(self.head)
         self.head = new_node
-        self.size += 1
 
     def insert_end(self,data):
+        self.increment_size()
+        new_node=Node(data)
         current=self.head
         while current.get_next():
             current=current.get_next()
-        new_node=Node(data)
         current.set_next(new_node)
 
     def insert_index(self,data,index):
+        self.increment_size()
         if index < 0 or index > self.size:
             raise ValueError("Index is inValid")
         elif index==0:
@@ -35,28 +37,39 @@ class LinkedList:
 
     def remove_data(self, data):
         #**this method does not work when the node to be deleted is last
-        node_to_be_deleted=self.find(data)
-        next=node_to_be_deleted.get_next()
-        node_to_be_deleted.set_data(next.get_data())
-        node_to_be_deleted.set_next(next.get_next())
-        return
+        try:
+            node_to_be_deleted=self.find(data)
+            next=node_to_be_deleted.get_next()
+            node_to_be_deleted.set_data(next.get_data())
+            node_to_be_deleted.set_next(next.get_next())
+            self.decrement_size()
+        except Exception as e:
+            print str(e)
+            return
 
     def find(self, data):
         current = self.head
         while current:
             if current.get_data() == data:
-                return current.get_data()
+                return current
             else:
                 current = current.get_next()
         if current is None:
             raise ValueError("Data is not in list")
-        return current.get_data()
+        return current
 
     def printList(self):
         current=self.head
         while current:
             print str(current.get_data())
             current=current.get_next()
+
+    def increment_size(self):
+        self.size+=1
+
+    def decrement_size(self):
+        self.size-=1
+
 
 
 class Node:
@@ -78,12 +91,5 @@ class Node:
 
 
 
-list=LinkedList()
-list.insert(1)
-list.insert_end(2)
-list.insert_end(3)
-list.insert_end(4)
-list.insert_end(5)
-list.insert_end(6)
-list.printList()
+
 
